@@ -33,7 +33,7 @@ class TweetController extends Controller
     {
         //送られてきたデータを検証する
         $request->validate([
-         'tweet' => 'required|max:255',
+            'tweet' => 'required|max:255',
         ]);
         //DBにデータを保存する
         $request->user()->tweets()->create($request->only('tweet'));
@@ -48,6 +48,7 @@ class TweetController extends Controller
     {
         // ツイートが入っているか確認
         //dd($tweet);
+        $tweet->load('comments');
         return view('tweets.show', compact('tweet'));
     }
 
@@ -66,12 +67,12 @@ class TweetController extends Controller
     public function update(Request $request, Tweet $tweet)
     {
         $request->validate([
-      'tweet' => 'required|max:255',
-    ]);
+            'tweet' => 'required|max:255',
+        ]);
 
-    $tweet->update($request->only('tweet'));
+        $tweet->update($request->only('tweet'));
 
-    return redirect()->route('tweets.show', $tweet);
+        return redirect()->route('tweets.show', $tweet);
     }
 
     /**
@@ -82,4 +83,5 @@ class TweetController extends Controller
         $tweet->delete();
         return redirect()->route('tweets.index');
     }
+
 }
