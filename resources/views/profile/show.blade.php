@@ -14,6 +14,23 @@
           <div class="text-gray-600 dark:text-gray-400 text-sm">
             <p>アカウント作成日時: {{ $user->created_at->format('Y-m-d H:i') }}</p>
           </div>
+          <!-- 🔽 フォローとフォロー解除 -->
+          @if ($user->id !== auth()->id())
+          <div class="text-gray-900 dark:text-gray-100">
+            @if ($user->followers->contains(auth()->id()))
+            <form action="{{ route('follow.destroy', $user) }}" method="POST">
+              @csrf
+              @method('DELETE')
+              <button type="submit" class="text-red-500 hover:text-red-700">unFollow</button>
+            </form>
+            @else
+            <form action="{{ route('follow.store', $user) }}" method="POST">
+              @csrf
+              <button type="submit" class="text-blue-500 hover:text-blue-700">follow</button>
+            </form>
+            @endif
+          </div>
+          @endif
         </div>
       </div>
     </div>
